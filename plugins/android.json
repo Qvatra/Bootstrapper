@@ -1,0 +1,60 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
+                            "count": 1
+                        }
+                    ],
+                    "/widget": [
+                        {
+                            "xml": "<feature name=\"Zip\"><param name=\"android-package\" value=\"org.apache.cordova.Zip\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 4
+                        }
+                    ],
+                    "/manifest": []
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "com.svdoever.tranferunzippresent"
+        },
+        "org.apache.cordova.file-transfer": {
+            "PACKAGE_NAME": "com.svdoever.tranferunzippresent"
+        },
+        "org.chromium.zip": {
+            "PACKAGE_NAME": "com.svdoever.tranferunzippresent"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "com.macaw.bootstrapper"
+        }
+    },
+    "dependent_plugins": {}
+}
