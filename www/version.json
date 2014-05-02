@@ -3,5 +3,9 @@
 "packageName":"",
 "packageSize":"",
 "hostAppVersion":0,
-"packageDirUri":"https://dl.dropboxusercontent.com/u/49691996/"
+"packageDirUri":"https://dl.dropboxusercontent.com/u/49691996/",
+"content":[
+			"content3.zip",
+			"content2.zip"
+		  ]
 }

@@ -96,6 +96,7 @@ function gotNewJson(obj) {
         );
     } else {
         trace('--- The latest version is already installed.');
+        checkContent();
         execute();
     }
 }
@@ -123,6 +124,17 @@ function packageUnzipped() {
     trace('Updating current json file...');
     var jsonFile = encodeURI("cdvfile://localhost/persistent/" + appNameSpace + "/serverJson/" + configName);
     (new FileSys()).load(jsonFile, appNameSpace, configName, execute, fail);
+}
+
+function checkContent() {
+    for (var j = 0; j < newJson.content.length; j++) {
+        for (var i = 0; i < oldJson.content.length; i++) {
+            if (newJson.content[j] == oldJson.content[i]) break;
+            if (i == oldJson.content.length - 1) { //new entry detected
+                trace('new content: ' + newJson.content[j]);
+            }
+        }
+    }
 }
 
 function execute() {
