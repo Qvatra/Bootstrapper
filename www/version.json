@@ -1,9 +1,9 @@
 {
 "hostAppVersion":0,
 "appVersion":0,
-"appName":"",
+"appName":"app.zip",
 "appSize":0,
-"description": "",
+"description": "description here",
 "forceUpdate": true,
 "updateDirUri":"https://dl.dropboxusercontent.com/u/49691996/",
 "content":[
