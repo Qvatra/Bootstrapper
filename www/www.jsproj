@@ -58,7 +58,7 @@
     <Content Include="bootstrapper.css" />
     <Content Include="bootstrapper.html" />
     <Content Include="bootstrapper.js" />
-    <Content Include="settings.js" />
+    <Content Include="config.js" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <!-- To modify your build process, add your task inside one of the targets below then uncomment
