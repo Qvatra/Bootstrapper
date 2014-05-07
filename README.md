@@ -24,11 +24,11 @@ All of the added content would be unpacked at the first run of the application.
 
 Configuration of bootstrapperConfig.js
 ============
-appNameSpace - root directory for your app in the device's File System.
-packageFolder - use 'www' for cordova projects.
-downloadDir - name of the temporary directory for downloads from server. Would be deleted after each update.
-embeddedApp - name of the zip file that contains www dir with your app.
-embeddedCordova - name of the zip file that contains platform cpecific cordova files and plugins.
-appEntry - entry point for your app.
-serverDir - URI to the directory on update_server. 
-configName - name of the json file which contains info about updates;
+appNameSpace - root directory for your app in the device's File System.   
+packageFolder - use 'www' for cordova projects.   
+downloadDir - name of the temporary directory for downloads from server. Would be deleted after each update.   
+embeddedApp - name of the zip file that contains www dir with your app.    
+embeddedCordova - name of the zip file that contains platform cpecific cordova files and plugins.   
+appEntry - entry point for your app.   
+serverDir - URI to the directory on update_server.    
+configName - name of the json file which contains info about updates.
