@@ -18,8 +18,17 @@ Installation
 4. add cordova.zip to '../your_cordova_project/www'. The archive should contain cordova.js, cordova_plugins.js and directory "plugins" with plugins. Note that all content of cordova.zip should correspont to the specific platform you are working with.
 5. optionally content zip files could be added to '../your_cordova_project/www'. 
 6. add version.json, app.zip and optionally content.zip to your update_server. DropBox is ok too :).
+7. install all dependencies.
 
 All of the added content would be unpacked at the first run of the application.
+
+
+Dependencies
+============
+org.apache.cordova.dialogs   
+org.apache.cordova.file   
+org.apache.cordova.file-transfer   
+org.chromium.zip   
 
 
 Configuration of bootstrapperConfig.js
