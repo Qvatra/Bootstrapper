@@ -19,13 +19,15 @@ C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\pla
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapper.css \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapper.html \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapper.js \
+C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\config.js \
+C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\content2.zip \
+C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\content3.zip \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\cordova.js \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\cordova.zip \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\cordova_plugins.js \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\img \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\obj \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\plugins \
-C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\settings.js \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\version.json \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\www.jsproj \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\www.jsproj.user \

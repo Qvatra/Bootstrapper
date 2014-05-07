@@ -24,10 +24,23 @@ function fatalError(error) {
 function progress(perc) {
     document.getElementById("downloadStatus").innerHTML = perc + '%';
 }
-function somethingWentWrong() {
-    trace(unknownError);
-    out(unknownError);
-}
+function functionFailed(error) {
+    if (typeof error === 'string' && error == 'failed to parse') {
+        trace('failed to parse new json. Running current version...');
+        out(updateFailed);
+    } else if (error.code == 3) { //unaccessible
+        out(noInternetMsg);
+        trace('*** No acces to the internet ***');
+    } else if (error.code == 1) { //no file found
+        out(noFileFoundMsg);
+        trace('*** No file found ***');
+    } else {
+        trace(unknownError);
+        out(unknownError);
+        trace('Running current version...');
+    }
+    execute();
+};
 
 function check() {
     trace('Checking if json exists...');
@@ -91,35 +104,12 @@ function jsonExists(obj) {
 
     out(searchUpdatesMsg);
     trace('Loading json from server...');
-    (new FileSys()).load(serverDir + configName, appNameSpace + "/" + downloadDir, configName, newJsonLoaded, failToLoad);      //here if failed(no internet connection) - run
+    (new FileSys()).load(serverDir + configName, appNameSpace + "/" + downloadDir, configName, newJsonLoaded, functionFailed);      //here if failed(no internet connection) - run
 }
-
-function failToLoad(error) {
-    if (error.code == 3) { //unaccessible
-        out(noInternetMsg);
-        trace('*** No acces to the internet ***');
-    } else if (error.code == 1) { //no file found
-        out(noFileFoundMsg);
-        trace('*** No file found ***');
-    } else somethingWentWrong();
-    execute();
-};
 
 function newJsonLoaded() {
     trace('Reading newJson...');
-    (new FileSys()).readJsonAsObject(appNameSpace + "/" + downloadDir, configName, compareHostVersion, failedToParse);
-}
-
-
-function failedToParse(error) {
-    if (typeof error === 'string' && error == 'failed to parse') {
-        trace('failed to parse new json. Running current version...');
-    } else {
-        somethingWentWrong();
-        trace('Running current version...');
-    }
-    out(updateFailed);
-    execute();
+    (new FileSys()).readJsonAsObject(appNameSpace + "/" + downloadDir, configName, compareHostVersion, functionFailed);
 }
 
 function compareHostVersion(obj) {
@@ -180,7 +170,6 @@ function checkContent() {
     //}
 }
 
-
 function isUpdateForced() {
     if (newJson.forceUpdate) {
         getContent();
@@ -206,7 +195,7 @@ function onConfirm(buttonIndex) {
 }
 
 function getContent() {
-    loadAndUnzipContent(-1, appDownload, failToLoad);
+    loadAndUnzipContent(-1, appDownload, functionFailed);
 }
 
 function loadAndUnzipContent(counter, done, failed) { //init with -1;
@@ -234,19 +223,23 @@ function loadAndUnzipContent(counter, done, failed) { //init with -1;
 function appDownload() {
     out(downloadUpdateMsg);
     trace('Downloading app...');
-    (new FileSys()).load(encodeURI(newJson.updateDirUri) + newJson.appName, appNameSpace + '/' + downloadDir, newJson.appName, unzipApp, failToLoad, progress);
+    (new FileSys()).load(encodeURI(newJson.updateDirUri) + newJson.appName, appNameSpace + '/' + downloadDir, newJson.appName, unzipApp, functionFailed, progress);
 }
 
 function unzipApp() {
     trace('Unzipping app...');
     document.getElementById("downloadStatus").innerHTML = "";
-    (new Archiver()).unzip(root + appNameSpace + '/' + downloadDir + '/' + newJson.appName, appNameSpace, copyNewJson, failToLoad);
+    (new Archiver()).unzip(root + appNameSpace + '/' + downloadDir + '/' + newJson.appName, appNameSpace, copyNewJson, functionFailed);
 }
 
 function copyNewJson() {
     trace('Updating current json file...');
     var jsonFile = encodeURI(root + appNameSpace + "/" + downloadDir + "/" + configName);
-    (new FileSys()).load(jsonFile, appNameSpace, configName, execute, failToLoad);
+    (new FileSys()).load(jsonFile, appNameSpace, configName, removeTemp, functionFailed);
+}
+
+function removeTemp (){
+    (new FileSys()).delDir(appNameSpace + '/' + downloadDir, execute, functionFailed);
 }
 
 function execute() {
@@ -266,13 +259,37 @@ function execute() {
 var FileSys = function () { }
 //-----------------------------------------------------------------------------------
 FileSys.prototype = {
-    readJsonAsObject: function (uri, fileName, success, fail) {
+    delDir: function (path, success, fail) {
         var that = this;
         that.success = success;
         that.fail = fail;
 
         that.getFilesystem(function (fileSystem) {
-            that.getFolder(fileSystem, uri, function (folder) {
+            that.getFolder(fileSystem, path, function (folder) {
+                folder.removeRecursively(function () {
+                    trace(path + " removed recursively.");
+                    typeof that.success === 'function' && that.success();
+                }, function (error) {
+                    trace("failed to remove folder: " + error.code);
+                    typeof that.fail === 'function' && that.fail(error);
+                });
+            }, function (error) {
+                trace("failed to get folder: " + error.code);
+                typeof that.fail === 'function' && that.fail(error);
+            });
+        }, function (error) {
+            trace("Failed to get filesystem: " + error.code);
+            typeof that.fail === 'function' && that.fail(error);
+        });
+    },
+
+    readJsonAsObject: function (path, fileName, success, fail) {
+        var that = this;
+        that.success = success;
+        that.fail = fail;
+
+        that.getFilesystem(function (fileSystem) {
+            that.getFolder(fileSystem, path, function (folder) {
                 folder.getFile(configName, { create: false }, function (fileEntry) {
                     fileEntry.file(function (file) {
                         var reader = new FileReader();
