@@ -1,6 +1,6 @@
 Bootstrapper
 ============
-Plug and play javascript for mobile devices that allows you to push updates/new content for your cordova project.
+Plug and play system that allows you to push updates/new content for installed cordova app. This gives more control for pushing your updates and avoids web store update system.
 
 
 Platform
