@@ -16,10 +16,9 @@ C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\pla
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\app.zip \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bin \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bld \
-C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapper.css \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapper.html \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapper.js \
-C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\config.js \
+C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\bootstrapperConfig.js \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\content2.zip \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\content3.zip \
 C:\Users\Oleksandr\Documents\Visual Studio 2013\Projects\cordovaBootstrapper\platforms\android\assets\www\cordova.js \

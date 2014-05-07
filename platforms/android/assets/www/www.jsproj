@@ -55,10 +55,9 @@
     <SDKReference Include="Microsoft.WinJS.2.0, Version=1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bootstrapper.css" />
     <Content Include="bootstrapper.html" />
     <Content Include="bootstrapper.js" />
-    <Content Include="config.js" />
+    <Content Include="bootstrapperConfig.js" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <!-- To modify your build process, add your task inside one of the targets below then uncomment

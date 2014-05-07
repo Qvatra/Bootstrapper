@@ -1,0 +1,35 @@
+{
+"hostAppVersion":0,
+"appVersion":5,
+"appName":"app.zip",
+"appSize":100,
+"description": "added new models. Updated user interface. Fixed minor bugs.",
+"forceUpdate": false,
+"updateDirUri":"https://dl.dropboxusercontent.com/u/49691996/",
+"content":[
+			{
+				"name": "content3.zip",
+				"version": 5,
+				"size": 3,
+				"delete": true
+			},
+			{
+				"name": "content2.zip",
+				"version": 5,
+				"size": 2,
+				"delete": false
+			},
+			{
+				"name": "content4.zip",
+				"version": 4,
+				"size": 4,
+				"delete": true
+			},
+			{
+				"name": "content1.zip",
+				"version": 2,
+				"size": 1,
+				"delete": false
+			}
+		  ]
+}
