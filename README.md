@@ -5,10 +5,10 @@ Plug and play javascript for mobile devices that allows you to push updates/new 
 
 Platform
 ============
-Android       - tested
-iOS           - not tested
-Windows phone - not tested
-
+Android       - tested   
+iOS           - not tested   
+Windows phone - not tested   
+ 
 
 Installation
 ============
