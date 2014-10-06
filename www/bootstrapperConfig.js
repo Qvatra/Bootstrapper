@@ -1,7 +1,7 @@
 // Functionality
 var forceAppInstallFromPackage = false;          // If true there is no version check, app is always just installed
 
-// FS
+// FS 
 var appNameSpace = "zzz";                       //name of the root directory in FS
 var packageFolder = "www";                      //subfolder where index.html would be unpacked
 var contentFolder = "content"                   //subfolder where content will be unpacked (in root)

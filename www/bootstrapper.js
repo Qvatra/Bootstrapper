@@ -2,7 +2,7 @@ var newJson = null;
 var oldJson = null;
 var root = "cdvfile://localhost/persistent/";
 var contentStack = [];
-var contentToDeleteStack = [];
+var contentToDeleteStack = []; 
 
                           // Save the restart url to localStorage
 localStorage.setItem("restarturl", window.location.href);
