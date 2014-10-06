@@ -1,6 +1,10 @@
+// Functionality
+var forceAppInstallFromPackage = false;          // If true there is no version check, app is always just installed
+
 // FS
 var appNameSpace = "zzz";                       //name of the root directory in FS
 var packageFolder = "www";                      //subfolder where index.html would be unpacked
+var contentFolder = "content"                   //subfolder where content will be unpacked (in root)
 var downloadDir = "download";                   //temporary directory for downloads from server
 
 //Embedded Files
@@ -14,6 +18,7 @@ var configName = "version.json";
 
 //UI
 var debugInfo = false;
+var outInfo = true;
 var installMsg = "Installing app... Please wait.";
 var searchUpdatesMsg = "Searching for updates...";
 var noInternetMsg = "No access to the internet.";

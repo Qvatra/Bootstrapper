@@ -1,11 +1,19 @@
-﻿var newJson = null;
+var newJson = null;
 var oldJson = null;
 var root = "cdvfile://localhost/persistent/";
 var contentStack = [];
 var contentToDeleteStack = [];
 
-document.addEventListener("deviceready", check, false);
+                          // Save the restart url to localStorage
+localStorage.setItem("restarturl", window.location.href);
 
+if (forceAppInstallFromPackage) {
+    trace('on device ready: clean install');
+    document.addEventListener("deviceready", cleanInstallFromAppPackage, false);
+} else {
+    trace('on device ready: check for install');
+    document.addEventListener("deviceready", check, false);
+}
 function trace(text) {
     if (debugInfo) {
         document.getElementById("statusPlace").innerHTML += "<br/>" + text;
@@ -13,9 +21,12 @@ function trace(text) {
     }
 }
 function out(text) {
-    if (!debugInfo) {
+    if (outInfo) {
         document.getElementById("output").innerHTML += "<br/>" + text;
     }
+}
+function outNoBr(text) {
+    document.getElementById("output").innerHTML += text;
 }
 function fatalError(error) {
     out(fatalErrorMsg);
@@ -30,7 +41,7 @@ function functionFailed(error) {
         out(updateFailed);
     } else if (error.code == 3) { //unaccessible
         out(noInternetMsg);
-        trace('*** No acces to the internet ***');
+        trace('*** No access to the internet ***');
     } else if (error.code == 1) { //no file found
         out(noFileFoundMsg);
         trace('*** No file found ***');
@@ -46,7 +57,6 @@ function removeExtention(str) {
 }
 
 function check() {
-    trace('Checking if json exists...');
     (new FileSys()).readJsonAsObject(appNameSpace, configName, jsonExists, noJsonFound);
 }
 
@@ -58,14 +68,35 @@ function noJsonFound(error) {
     } else if (error.code == 1) {//file not found
         out(installMsg);
         trace(' *** no json found ***');
-        trace('Installing app files...');
+        out('Installeren app files...');
         (new Archiver()).unzip(window.location.href.replace("bootstrapper.html", embeddedApp), appNameSpace, unzippedApp, fatalError);
 
     } else fatalError(error);
 }
 
+// Serge: added function to do complete reinstall from app package. First remove packageFolder (www), then install.
+//        If remove fails, also do install.
+function cleanInstallFromAppPackage() {
+    trace("cleanInstallFromAppPackage");
+    out(installMsg);
+    (new FileSys()).delDir(appNameSpace + '/' + packageFolder, installFromAppPackage, installFromAppPackage);
+}
+
+function installFromAppPackage() {
+    trace("installFromAppPackage");
+    out('Configureren applicatie folder...');
+    (new FileSys()).mkDir(appNameSpace, appNameSpaceFolderEnsured, appNameSpaceFolderEnsured);
+}
+
+function appNameSpaceFolderEnsured() {
+    trace("appNameSpaceFolderEnsured");
+    out('Configureren applicatie files...');
+    (new Archiver()).unzip(window.location.href.replace("bootstrapper.html", embeddedApp), appNameSpace, unzippedApp, fatalError);
+}
+
 function unzippedApp() {
     trace('Installing cordova files...');
+    out('Configureren systeem files...');
     (new Archiver()).unzip(window.location.href.replace("bootstrapper.html", embeddedCordova), appNameSpace + '/' + packageFolder, unzippedCordova, fatalError);
 }
 
@@ -96,7 +127,11 @@ function unzipEmbeddedContent(counter, success, fail) { //init with -1
     } else {
         trace(oldJson.content[counter].name);
         contentFileName = oldJson.content[counter].name;
-        (new Archiver()).unzip(window.location.href.replace("bootstrapper.html", contentFileName), appNameSpace + '/' + packageFolder + '/' + removeExtention(contentFileName), unzipEmbeddedContent(counter, success, fail), fail);
+        // SvdO: old:     (new Archiver()).unzip(window.location.href.replace("bootstrapper.html", contentFileName), appNameSpace + '/' + packageFolder + '/' + removeExtention(contentFileName), unzipEmbeddedContent(counter, success, fail), fail);
+        var contentZip = window.location.href.replace("bootstrapper.html", contentFileName);
+        var contentUnzipFolder = appNameSpace + '/' + contentFolder;
+        out('Configureren content files...');
+        (new Archiver()).unzip(contentZip, contentUnzipFolder, unzipEmbeddedContent(counter, success, fail), fail);
     }
 }
 
@@ -125,14 +160,19 @@ function compareHostVersion(obj) {
     trace('--- newJson version is: ' + newJson.appVersion);
 
     if (newJson.hostAppVersion > oldJson.hostAppVersion) {
-        navigator.notification.alert(
-            hostOutOfDateMsg,
-            execute,
-            'Update',
-            'Cancel'
-        );
+        navigator.notification.alert(hostOutOfDateMsg, executeOldOrQuit, 'Update', 'OK');
     } else {
         compareAppVersion();
+    }
+}
+
+function executeOldOrQuit() {
+    if (newJson.forceUpdate) {
+        trace('Can not continue. You must update host first');
+        out('Update App in app store');
+        navigator.app.exitApp();
+    } else {
+        execute();
     }
 }
 
@@ -155,7 +195,7 @@ function checkContent() {
                     newEntry();
                     break;
                 } else break;                                         //brakes i-loop
-            } 
+            }
             if (i == oldJson.content.length - 1) {
                 trace('new content: ' + newJson.content[j].name);
                 newEntry();
@@ -221,7 +261,11 @@ function loadAndUnzipContent(counter, done, failed) { //init with -1;
                 trace('Unzipping ' + contentStack[counter] + '...');
                 document.getElementById("downloadStatus").innerHTML = "";
                 contentFileName = contentStack[counter];
-                (new Archiver()).unzip(root + appNameSpace + '/' + downloadDir + '/' + contentFileName, appNameSpace + '/' + packageFolder + '/' + removeExtention(contentFileName),
+                // SvdO                (new Archiver()).unzip(root + appNameSpace + '/' + downloadDir + '/' + contentFileName, appNameSpace + '/' + packageFolder + '/' + removeExtention(contentFileName),
+                var contentZip = root + appNameSpace + '/' + downloadDir + '/' + contentFileName;
+                var contentUnzipFolder = appNameSpace + '/' + contentFolder;
+                //trace("Unzipping content from " + contentZip + " to " + contentUnzipFolder);
+                (new Archiver()).unzip(contentZip, contentUnzipFolder,
                     function () {   //success
                         loadAndUnzipContent(counter, done);
                     },
@@ -240,6 +284,7 @@ function appDownload() {
 
 function unzipApp() {
     trace('Unzipping app...');
+    out("Uitpakken applicatie configuratie");
     document.getElementById("downloadStatus").innerHTML = "";
     (new Archiver()).unzip(root + appNameSpace + '/' + downloadDir + '/' + newJson.appName, appNameSpace, copyNewJson, functionFailed);
 }
@@ -250,7 +295,7 @@ function copyNewJson() {
     (new FileSys()).load(jsonFile, appNameSpace, configName, removeTemp, functionFailed);
 }
 
-function removeTemp (){
+function removeTemp() {
     (new FileSys()).delDir(appNameSpace + '/' + downloadDir, removeContentAsync, functionFailed);
 }
 
@@ -269,8 +314,8 @@ function execute() {
         out(startMsg);
         start();
     } else {
-        trace('--- starting in 5 seconds...');
-        setTimeout(start, 5000);
+        trace('--- starting in 7 seconds...');
+        setTimeout(start, 7000);
     }
     function start() {
         (new FileSys()).run(function () { }, fatalError);
@@ -295,6 +340,37 @@ FileSys.prototype = {
                     trace("failed to remove folder: " + error.code);
                     typeof that.fail === 'function' && that.fail(error);
                 });
+            }, function (error) {
+                trace("failed to get folder: " + error.code);
+                typeof that.fail === 'function' && that.fail(error);
+            });
+        }, function (error) {
+            trace("Failed to get filesystem: " + error.code);
+            typeof that.fail === 'function' && that.fail(error);
+        });
+    },
+
+    mkDir: function (path, success, fail) {
+        var that = this;
+        that.success = success;
+        that.fail = fail;
+
+        that.getFilesystem(function (fileSystem) {
+            // create the folder if it does not exist
+            that.getFolder(fileSystem, path, function (folder) {
+                if (device.platform.toLowerCase() === 'ios') {
+                    // Per http://stackoverflow.com/questions/23472899/phonegap-ios-prevent-documents-folder-backup-on-icloud
+                    // set metadata on folder to not backup in iCloud
+                    folder.setMetadata(function () {
+                            trace(path + " metadata added to not backup in iCloud.");
+                            typeof that.success === 'function' && that.success();
+                        }, function (error) {
+                            trace("failed to set metadata to prevent iCloud backup: " + error.code);
+                            typeof that.fail === 'function' && that.fail(error);
+                        },
+                        { "com.apple.MobileBackup": 1});
+                }
+                typeof that.success === 'function' && that.success();
             }, function (error) {
                 trace("failed to get folder: " + error.code);
                 typeof that.fail === 'function' && that.fail(error);
@@ -343,6 +419,38 @@ FileSys.prototype = {
         });
     },
 
+    fileExists: function (path, fileName, exists, notexists, fail) {
+        var that = this;
+        that.exists = exists;
+        that.norexists = notexists;
+        that.fail = fail;
+
+        that.getFilesystem(function (fileSystem) {
+            that.getFolder(fileSystem, path, function (folder) {
+                folder.getFile(configName, { create: false }, function (fileEntry) {
+                    fileEntry.file(function (file) {
+                        var reader = new FileReader();
+                        reader.onloadend = function (evt) {
+                            typeof that.exists === 'function' && that.exists();
+                        };
+                    }, function (error) {
+                        trace("Failed to get file, so it does not exist!");
+                        typeof that.notexists === 'function' && that.notexists();
+                    });
+                }, function (error) {
+                    trace("failed to get file, so it does not exists!");
+                    typeof that.notexists === 'function' && that.notexists();
+                });
+            }, function (error) {
+                trace("failed to get folder: " + error.code);
+                typeof that.fail === 'function' && that.fail(error);
+            });
+        }, function (error) {
+            trace("failed to get filesystem: " + error.code);
+            typeof that.fail === 'function' && that.fail(error);
+        });
+    },
+
     load: function (uri, folderName, fileName, success, fail, progress) {
         var that = this;
         that.progress = progress;
@@ -367,7 +475,7 @@ FileSys.prototype = {
         );
     },
 
-    //copyDir: function (srcDir, dstDir, success, fail) { //doesn't work woth path file:///
+    //copyDir: function (srcDir, dstDir, success, fail) { //doesn't work with path file:///
     //    var that = this;
     //    that.success = success;
     //    that.fail = fail;
@@ -462,7 +570,7 @@ Archiver.prototype = {
         var that = this;
         that.success = success;
         that.fail = fail;
-
+        trace("Unzipping " + pathFrom + " to " + root + pathTo + "/");
         zip.unzip(pathFrom, root + pathTo + "/",
             function (code) {
                 if (code < 0) {
@@ -472,6 +580,10 @@ Archiver.prototype = {
                     trace("Unzipped successfully");
                     typeof that.success === 'function' && that.success();
                 }
+            },
+            function (progressEvent) {
+                //outNoBr(" - " + Math.round((progressEvent.loaded / progressEvent.total) * 100) + "%");
+                outNoBr(".");
             }
         );
     }
