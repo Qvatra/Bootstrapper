@@ -245,7 +245,7 @@ function onConfirm(buttonIndex) {
 }
 
 function prepareContent() {
-    loadAndUnzipContent(-1, appDownload, functionFailed);
+    loadAndUnzipContent(-1, deleteWWW, functionFailed);
 }
 
 function loadAndUnzipContent(counter, done, failed) { //init with -1;
@@ -274,6 +274,11 @@ function loadAndUnzipContent(counter, done, failed) { //init with -1;
             failed,      //failed to connect or no file found => run current
         progress);
     }
+}
+
+function deleteWWW() {
+    trace('Deleting www folder...');
+    (new FileSys()).delDir(appNameSpace + '/www', appDownload, functionFailed);
 }
 
 function appDownload() {
